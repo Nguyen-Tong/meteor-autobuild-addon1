@@ -1,71 +1,30 @@
 package com.autobuild.manager;
 
-import com.autobuild.modules.AutoBuildModule;
-import meteordevelopment.meteorclient.utils.player.InvUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.item.Items;
+import meteordevelopment.meteorclient.events.world.TickEvent;
+import meteordevelopment.orbit.EventHandler;
+import net.minecraft.util.Hand;
+
+import static meteordevelopment.meteorclient.MeteorClient.mc;
 
 public class StateManager {
-    private final AutoBuildModule module;
-    private final MinecraftClient mc = MinecraftClient.getInstance();
 
-    public enum State {
-        IDLE,
-        BUILDING,
-        PLACE_ICE_PLACEHOLDERS,
-        PROCESS_FLUIDS,
-        FETCHING_ITEMS,
-        EMERGENCY_MLG
+    private boolean isWorking = false;
+
+    public void startTask() {
+        isWorking = true;
     }
 
-    private State currentState = State.IDLE;
-
-    public StateManager(AutoBuildModule module) {
-        this.module = module;
+    public void stopTask() {
+        isWorking = false;
     }
 
-    public void reset() {
-        currentState = State.BUILDING;
-    }
-
-    public void tick() {
+    @EventHandler
+    private void onTick(TickEvent.Post event) {
         if (mc.player == null || mc.world == null) return;
 
-        if (mc.player.fallDistance > 3.0f && hasMLGWaterBucket()) {
-            currentState = State.EMERGENCY_MLG;
+        if (isWorking) {
+            // Ví dụ gọi tương tác vật phẩm đã sửa đúng cú pháp 1.21.1 (bỏ tham số mc.world thừa)
+            // mc.interactionManager.interactItem(mc.player, mc.player.getActiveHand());
         }
-
-        if (mc.player.getHungerManager().getFoodLevel() < 14) {
-            handleAutoEat();
-        }
-
-        switch (currentState) {
-            case BUILDING:
-                tickBuilding();
-                break;
-            case EMERGENCY_MLG:
-                executeMLG();
-                break;
-            default:
-                break;
-        }
-    }
-
-    private boolean hasMLGWaterBucket() {
-        return mc.player.getInventory().getStack(8).isOf(Items.WATER_BUCKET);
-    }
-
-    private void handleAutoEat() {
-        InvUtils.swap(7, true);
-        mc.options.useKey.setPressed(true);
-    }
-
-    private void tickBuilding() {}
-
-    private void executeMLG() {
-        mc.player.setPitch(90.0f);
-        InvUtils.swap(8, true);
-        mc.interactionManager.interactItem(mc.player, mc.world, mc.player.getActiveHand());
-        currentState = State.BUILDING;
     }
 }
