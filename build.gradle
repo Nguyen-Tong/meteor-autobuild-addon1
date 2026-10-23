@@ -22,9 +22,11 @@ dependencies {
     minecraft "com.mojang:minecraft:1.21.1"
     mappings "net.fabricmc:yarn:1.21.1+build.3:v2"
     modImplementation "net.fabricmc:fabric-loader:0.16.0"
-    modImplementation "net.fabricmc:fabric-api:fabric-api:0.102.0+1.21.1"
+    
+    // Sửa đúng group ID của Fabric API
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.102.0+1.21.1"
 
-    // Sử dụng JitPack trỏ đúng vào tag phiên bản 0.5.8 của Meteor Client
+    // Meteor Client qua JitPack
     modImplementation "com.github.MeteorDevelopment:meteor-client:0.5.8"
 }
 
