@@ -1,0 +1,26 @@
+name: Build Fabric Mod
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Upload compiled Jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: meteor-autobuild-jar
+          path: build/libs/*.jar
+          
