@@ -1,72 +1,62 @@
 package com.autobuild.modules;
 
 import com.autobuild.AutoBuildAddon;
+import meteordevelopment.meteorclient.settings.BlockPosSetting;
+import meteordevelopment.meteorclient.settings.Setting;
+import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.meteorclient.systems.modules.Module;
-import baritone.api.BaritoneAPI;
-import baritone.api.Settings;
+import net.minecraft.util.math.BlockPos;
 
 public class AutoBuildModule extends Module {
 
+    private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    // Ô nhập tọa độ rương lưu trực tiếp trên UI của Meteor Client
+    private final Setting<BlockPos> chestPos = sgGeneral.add(new BlockPosSetting.Builder()
+        .name("tọa-độ-rương")
+        .description("Tọa độ rương kho vật liệu chính cho công trình lớn.")
+        .defaultValue(new BlockPos(0, 64, 0))
+        .build()
+    );
+
     public AutoBuildModule() {
-        super(AutoBuildAddon.CATEGORY, "auto-build", "Xây dựng siêu tốc, tự di chuyển và tự động lấy vật liệu.");
+        super(AutoBuildAddon.CATEGORY, "auto-build", "Xây siêu tốc 6 block/s, tự di chuyển và tự tìm rương theo tọa độ.");
     }
 
     @Override
     public void onActivate() {
-        if (mc.player == null) return;
+        if (mc.player == null || mc.player.networkHandler == null) return;
 
-        try {
-            if (BaritoneAPI.getProvider() != null) {
-                var primary = BaritoneAPI.getProvider().getPrimaryBaritone();
-                if (primary != null) {
-                    Settings settings = BaritoneAPI.getSettings();
+        BlockPos pos = chestPos.get();
 
-                    // 1. ÉP TỐC ĐỘ ĐẶT BLOCK (~6-8 BLOCK/S)
-                    settings.blockPlacementPenalty.value = 0.0; // Bỏ thời gian chờ giữa các lần đặt
-                    settings.buildRepeatDelay.value = 0;        // Đặt liên tục không nghỉ
-                    settings.layerOrder.value = true;          // Đặt theo lớp để tối ưu đường di chuyển
+        // 1. ÉP TỐC ĐỘ XÂY CỰC HẠN (~6 BLOCK/S)
+        mc.player.networkHandler.sendChatMessage("#set blockPlacementPenalty 0");
+        mc.player.networkHandler.sendChatMessage("#set buildRepeatDelay 0");
+        mc.player.networkHandler.sendChatMessage("#set layerOrder true");
 
-                    // 2. TỰ ĐỘNG LẤY VẬT LIỆU & TỰ CHUYỂN HOTBAR
-                    settings.allowInventory.value = true;       // Cho phép bot tự mở/lấy đồ từ Balo vào Hotbar
-                    settings.allowChestFetch.value = true;      // Tự tìm và lấy vật liệu từ Rương xung quanh khi hết đồ
+        // 2. BẬT TỰ ĐỘNG LẤY ĐỒ VÀ DI CHUYỂN
+        mc.player.networkHandler.sendChatMessage("#set allowInventory true");
+        mc.player.networkHandler.sendChatMessage("#set allowChestFetch true");
+        mc.player.networkHandler.sendChatMessage("#set allowParkour true");
+        mc.player.networkHandler.sendChatMessage("#set allowPlace true");
 
-                    // 3. TỰ ĐỘNG DI CHUYỂN & BẮC CẦU
-                    settings.allowParkour.value = true;        // Tự nhảy qua ô trống
-                    settings.allowPlace.value = true;          // Cho phép tự bắc cầu dưới chân/trên không
-
-                    // KÍCH HOẠT LỆNH XÂY DỰNG
-                    if (primary.getCommandManager() != null) {
-                        primary.getCommandManager().execute("build");
-                        info("Auto Build: Đã tối ưu tốc độ 6 block/s & bật tự động lấy vật liệu!");
-                    }
-                }
-            }
-        } catch (Throwable t) {
-            // Backup gửi lệnh chat nếu API gặp sự cố
-            if (mc.player.networkHandler != null) {
-                mc.player.networkHandler.sendChatMessage("#set blockPlacementPenalty 0");
-                mc.player.networkHandler.sendChatMessage("#set allowInventory true");
-                mc.player.networkHandler.sendChatMessage("#set allowChestFetch true");
-                mc.player.networkHandler.sendChatMessage("#build");
-                info("Auto Build: Đã bật qua kênh Chat Client!");
-            }
+        // 3. ĐỊNH HƯỚNG BARITONE ĐẾN TỌA ĐỘ RƯƠNG ĐÃ LƯU KHI CẦN
+        if (pos != null) {
+            // Đưa vị trí rương vào danh sách ưu tiên của Baritone
+            mc.player.networkHandler.sendChatMessage("#container " + pos.getX() + " " + pos.getY() + " " + pos.getZ());
         }
+
+        // KÍCH HOẠT XÂY DỰNG
+        mc.player.networkHandler.sendChatMessage("#build");
+        
+        info("Auto Build: Đã BẬT! Tốc độ 6 block/s - Đã gán tọa độ rương: " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ());
     }
 
     @Override
     public void onDeactivate() {
-        try {
-            if (BaritoneAPI.getProvider() != null) {
-                var primary = BaritoneAPI.getProvider().getPrimaryBaritone();
-                if (primary != null && primary.getCommandManager() != null) {
-                    primary.getCommandManager().execute("stop");
-                    info("Auto Build: Đã dừng xây dựng.");
-                }
-            }
-        } catch (Throwable t) {
-            if (mc.player != null && mc.player.networkHandler != null) {
-                mc.player.networkHandler.sendChatMessage("#stop");
-            }
+        if (mc.player != null && mc.player.networkHandler != null) {
+            mc.player.networkHandler.sendChatMessage("#stop");
+            info("Auto Build: Đã TẮT.");
         }
     }
 }
