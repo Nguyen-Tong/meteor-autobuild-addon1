@@ -8,14 +8,18 @@ group = "com.autobuild"
 
 repositories {
     mavenCentral()
-    maven { 
-        name = "Fabric"
-        url = "https://maven.fabricmc.net/" 
-    }
-    // Sử dụng Modrinth Maven chính thức
+    // Khai báo đầy đủ cả 2 kho releases và snapshots của Meteor Client
     maven {
-        name = "Modrinth"
-        url = "https://api.modrinth.com/maven"
+        name = "Meteor Releases"
+        url = "https://maven.meteorclient.com/releases"
+    }
+    maven {
+        name = "Meteor Snapshots"
+        url = "https://maven.meteorclient.com/snapshots"
+    }
+    maven {
+        name = "Fabric"
+        url = "https://maven.fabricmc.net/"
     }
 }
 
@@ -25,8 +29,8 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:0.16.0"
     modImplementation "net.fabricmc.fabric-api:fabric-api:0.102.0+1.21.1"
 
-    // Tải Meteor Client bản 0.5.8 trực tiếp từ Modrinth
-    modImplementation "maven.modrinth:meteor-client:0.5.8-2101"
+    // Dependency chính thức của Meteor Client 0.5.8 cho 1.21.1
+    modImplementation "meteordevelopment:meteor-client:0.5.8"
 }
 
 processResources {
