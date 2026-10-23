@@ -6,6 +6,26 @@ plugins {
 version = "1.0.0"
 group = "com.autobuild"
 
+// Tự động tải Baritone API trực tiếp từ GitHub nếu chưa có để bypass hoàn toàn JitPack
+File libsDir = new File(projectDir, "libs")
+if (!libsDir.exists()) {
+    libsDir.mkdirs()
+}
+File baritoneApiJar = new File(libsDir, "baritone-api-1.11.3.jar")
+if (!baritoneApiJar.exists()) {
+    try {
+        println "Đang tải Baritone API v1.11.3 trực tiếp từ GitHub..."
+        new URL("https://github.com/cabaletta/baritone/releases/download/v1.11.3/baritone-api-1.11.3.jar").withInputStream { input ->
+            baritoneApiJar.withOutputStream { output ->
+                output << input
+            }
+        }
+        println "Tải thành công Baritone API!"
+    } catch (Exception e) {
+        println "Không thể tải tự động: " + e.message
+    }
+}
+
 repositories {
     mavenCentral()
     maven { 
@@ -20,9 +40,9 @@ repositories {
         name = "Fabric"
         url = "https://maven.fabricmc.net/" 
     }
-    maven { 
-        name = "JitPack"
-        url = "https://jitpack.io" 
+    // Sử dụng thư mục libs nội bộ chứa Baritone API đã tải
+    flatDir {
+        dirs 'libs'
     }
 }
 
@@ -33,7 +53,8 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:0.102.0+1.21.1"
     modImplementation "meteordevelopment:meteor-client:0.5.8"
     
-    compileOnly "com.github.cabaletta.baritone:api:1.11.3"
+    // Sử dụng file jar API cục bộ được tải tự động
+    compileOnly name: 'baritone-api-1.11.3'
 }
 
 processResources {
