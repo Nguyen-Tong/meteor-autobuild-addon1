@@ -1,34 +1,29 @@
 package com.autobuild.manager;
 
-import net.minecraft.client.MinecraftClient;
+import meteordevelopment.meteorclient.utils.player.FindItemResult;
+import meteordevelopment.meteorclient.utils.player.InvUtils;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.component.DataComponentTypes;
+
+import static meteordevelopment.meteorclient.MeteorClient.mc;
 
 public class InventoryManager {
-    private final MinecraftClient mc = MinecraftClient.getInstance();
 
-    public boolean isProtectedSurvivalItem(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-
-        boolean isPickaxe = stack.isOf(Items.NETHERITE_PICKAXE) || 
-                            stack.isOf(Items.DIAMOND_PICKAXE) || 
-                            stack.isOf(Items.IRON_PICKAXE) || 
-                            stack.isOf(Items.STONE_PICKAXE) || 
-                            stack.isOf(Items.WOODEN_PICKAXE);
-
-        boolean isAxe = stack.isOf(Items.NETHERITE_AXE) || 
-                        stack.isOf(Items.DIAMOND_AXE) || 
-                        stack.isOf(Items.IRON_AXE) || 
-                        stack.isOf(Items.STONE_AXE) || 
-                        stack.isOf(Items.WOODEN_AXE);
-
-        boolean isWaterBucket = stack.isOf(Items.WATER_BUCKET);
-        boolean isFood = stack.getItem().getFoodComponent() != null;
-
-        return isPickaxe || isAxe || isWaterBucket || isFood;
+    /**
+     * Kiểm tra vật phẩm có phải là thức ăn hay không (chuẩn API Minecraft 1.21.1)
+     */
+    public static boolean isFood(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        return stack.contains(DataComponentTypes.FOOD);
     }
 
-    public boolean isProtectedHotbarSlot(int slotIndex) {
-        return slotIndex >= 5 && slotIndex <= 8;
+    /**
+     * Tìm rương hoặc khối vật liệu trong thanh hotbar
+     */
+    public static FindItemResult findBuildingMaterial() {
+        return InvUtils.findInHotbar(itemStack -> 
+            itemStack.getItem().toString().toLowerCase().contains("chest") ||
+            itemStack.getItem().toString().toLowerCase().contains("block")
+        );
     }
 }
