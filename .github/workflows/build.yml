@@ -20,11 +20,6 @@ jobs:
         with:
           gradle-version: '8.8'
 
-      - name: Tự động tải Meteor Client JAR
-        run: |
-          mkdir -p libs
-          curl -L -o libs/meteor-client-0.5.8.jar https://github.com/MeteorDevelopment/meteor-client/releases/download/0.5.8/meteor-client-0.5.8.jar
-
       - name: Build with Gradle
         run: gradle build
         
