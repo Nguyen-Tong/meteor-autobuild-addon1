@@ -8,20 +8,16 @@ group = "com.autobuild"
 
 repositories {
     mavenCentral()
-    maven {
-        name = "Meteor Dev"
-        url = "https://maven.meteorclient.com/releases"
+    maven { 
+        name = "Meteor"
+        url = 'https://maven.meteorclient.com/' 
     }
-    maven {
-        name = "Meteor Snapshots"
-        url = "https://maven.meteorclient.com/snapshots"
-    }
-    maven {
+    maven { 
         name = "Fabric"
-        url = "https://maven.fabricmc.net/"
+        url = 'https://maven.fabricmc.net/' 
     }
-    maven {
-        url = "https://jitpack.io"
+    maven { 
+        url = 'https://jitpack.io' 
     }
 }
 
@@ -30,9 +26,9 @@ dependencies {
     mappings "net.fabricmc:yarn:1.21.1+build.3:v2"
     modImplementation "net.fabricmc:fabric-loader:0.16.0"
     modImplementation "net.fabricmc.fabric-api:fabric-api:0.102.0+1.21.1"
-
-    // Meteor Client cho Minecraft 1.21.1
-    modImplementation "com.github.MeteorDevelopment:meteor-client:0.5.8"
+    
+    // Sử dụng đúng định dạng chuẩn của Meteor Client
+    modImplementation "meteordevelopment:meteor-client:0.5.8"
 }
 
 processResources {
