@@ -28,7 +28,7 @@ public class AutoBuildModule extends Module {
     private void onTick(TickEvent.Post event) {
         if (mc.player == null || mc.world == null) return;
 
-        // Bọc trong try-catch để dù Baritone chưa sẵn sàng cũng tuyệt đối KHÔNG crash game
+        // Dùng catch (Throwable t) để bắt mọi loại lỗi (bao gồm cả LinkageError / NoClassDefFoundError)
         try {
             if (BaritoneAPI.getProvider() != null) {
                 var baritone = BaritoneAPI.getProvider().getPrimaryBaritone();
@@ -43,8 +43,9 @@ public class AutoBuildModule extends Module {
                     }
                 }
             }
-        } catch (Exception e) {
-            // Ghi nhận lỗi nhẹ nếu cần, game vẫn chạy bình thường không bị văng
+        } catch (Throwable t) {
+            // Ghi log lỗi vào console nhưng tuyệt đối KHÔNG làm crash game
+            t.printStackTrace();
         }
     }
 }
