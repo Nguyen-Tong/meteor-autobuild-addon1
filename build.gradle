@@ -9,15 +9,12 @@ group = "com.autobuild"
 repositories {
     mavenCentral()
     maven { 
-        name = "Meteor"
-        url = 'https://maven.meteorclient.com/' 
-    }
-    maven { 
         name = "Fabric"
-        url = 'https://maven.fabricmc.net/' 
+        url = "https://maven.fabricmc.net/" 
     }
     maven { 
-        url = 'https://jitpack.io' 
+        name = "JitPack"
+        url = "https://jitpack.io" 
     }
 }
 
@@ -27,8 +24,8 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:0.16.0"
     modImplementation "net.fabricmc.fabric-api:fabric-api:0.102.0+1.21.1"
     
-    // Sử dụng đúng định dạng chuẩn của Meteor Client
-    modImplementation "meteordevelopment:meteor-client:0.5.8"
+    // Tải Meteor Client qua JitPack
+    modImplementation "com.github.MeteorDevelopment:meteor-client:master"
 }
 
 processResources {
