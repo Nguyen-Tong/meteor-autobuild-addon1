@@ -12,9 +12,10 @@ repositories {
         name = "Fabric"
         url = "https://maven.fabricmc.net/" 
     }
-    maven { 
-        name = "JitPack"
-        url = "https://jitpack.io" 
+    // Sử dụng Modrinth Maven chính thức
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
     }
 }
 
@@ -23,9 +24,9 @@ dependencies {
     mappings "net.fabricmc:yarn:1.21.1+build.3:v2"
     modImplementation "net.fabricmc:fabric-loader:0.16.0"
     modImplementation "net.fabricmc.fabric-api:fabric-api:0.102.0+1.21.1"
-    
-    // Tải Meteor Client qua JitPack
-    modImplementation "com.github.MeteorDevelopment:meteor-client:master"
+
+    // Tải Meteor Client bản 0.5.8 trực tiếp từ Modrinth
+    modImplementation "maven.modrinth:meteor-client:0.5.8-2101"
 }
 
 processResources {
