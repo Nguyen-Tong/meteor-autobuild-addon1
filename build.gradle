@@ -8,18 +8,12 @@ group = "com.autobuild"
 
 repositories {
     mavenCentral()
-    // Khai báo đầy đủ cả 2 kho releases và snapshots của Meteor Client
-    maven {
-        name = "Meteor Releases"
-        url = "https://maven.meteorclient.com/releases"
-    }
-    maven {
-        name = "Meteor Snapshots"
-        url = "https://maven.meteorclient.com/snapshots"
-    }
-    maven {
+    maven { 
         name = "Fabric"
-        url = "https://maven.fabricmc.net/"
+        url = "https://maven.fabricmc.net/" 
+    }
+    flatDir {
+        dirs 'libs'
     }
 }
 
@@ -29,8 +23,8 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:0.16.0"
     modImplementation "net.fabricmc.fabric-api:fabric-api:0.102.0+1.21.1"
 
-    // Dependency chính thức của Meteor Client 0.5.8 cho 1.21.1
-    modImplementation "meteordevelopment:meteor-client:0.5.8"
+    // Load Meteor Client locally from the libs folder
+    modImplementation files('libs/meteor-client-0.5.8.jar')
 }
 
 processResources {
