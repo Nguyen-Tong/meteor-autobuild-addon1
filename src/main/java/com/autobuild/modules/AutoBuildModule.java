@@ -5,6 +5,7 @@ import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.orbit.EventHandler;
 
+// Import Baritone API để đọc tọa độ từ lệnh #sel 1, #sel 2
 import baritone.api.BaritoneAPI;
 import baritone.api.selection.ISelection;
 import java.util.List;
@@ -29,12 +30,13 @@ public class AutoBuildModule extends Module {
     private void onTick(TickEvent.Post event) {
         if (mc.player == null || mc.world == null) return;
 
-        // Lấy danh sách vùng chọn từ Baritone
+        // Lấy danh sách vùng chọn từ Baritone (#sel 1, #sel 2)
         List<ISelection> selections = BaritoneAPI.getProvider().getPrimaryBaritone().getSelectionManager().getSelections();
         
         if (selections != null && !selections.isEmpty()) {
             for (ISelection selection : selections) {
-                // Đã truy cập thành công tọa độ selection.pos1() và selection.pos2()
+                // Bạn có thể truy xuất tọa độ qua selection.pos1() và selection.pos2()
+                // Kết hợp với Litematica schematic để thực thi tiến trình xây dựng tại đây.
             }
         }
     }
