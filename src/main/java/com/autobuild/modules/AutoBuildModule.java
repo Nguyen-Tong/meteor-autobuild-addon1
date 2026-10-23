@@ -5,7 +5,6 @@ import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.orbit.EventHandler;
 
-// Import Baritone API an toàn
 import baritone.api.BaritoneAPI;
 import baritone.api.selection.ISelection;
 
@@ -17,7 +16,7 @@ public class AutoBuildModule extends Module {
 
     @Override
     public void onActivate() {
-        info("Auto Build đã BẬT. Đang chờ quét vùng chọn từ Baritone...");
+        info("Auto Build đã BẬT.");
     }
 
     @Override
@@ -27,20 +26,25 @@ public class AutoBuildModule extends Module {
 
     @EventHandler
     private void onTick(TickEvent.Post event) {
-        // Kiểm tra an toàn chống crash
         if (mc.player == null || mc.world == null) return;
-        if (BaritoneAPI.getProvider() == null || BaritoneAPI.getProvider().getPrimaryBaritone() == null) return;
-        if (BaritoneAPI.getProvider().getPrimaryBaritone().getSelectionManager() == null) return;
 
-        // Lấy danh sách vùng chọn an toàn
-        ISelection[] selections = BaritoneAPI.getProvider().getPrimaryBaritone().getSelectionManager().getSelections();
-        
-        if (selections != null && selections.length > 0) {
-            for (ISelection selection : selections) {
-                if (selection != null) {
-                    // Xử lý tọa độ selection.pos1() và selection.pos2() tại đây
+        // Bọc trong try-catch để dù Baritone chưa sẵn sàng cũng tuyệt đối KHÔNG crash game
+        try {
+            if (BaritoneAPI.getProvider() != null) {
+                var baritone = BaritoneAPI.getProvider().getPrimaryBaritone();
+                if (baritone != null && baritone.getSelectionManager() != null) {
+                    ISelection[] selections = baritone.getSelectionManager().getSelections();
+                    if (selections != null && selections.length > 0) {
+                        for (ISelection selection : selections) {
+                            if (selection != null) {
+                                // Xử lý tọa độ selection.pos1() và selection.pos2() tại đây
+                            }
+                        }
+                    }
                 }
             }
+        } catch (Exception e) {
+            // Ghi nhận lỗi nhẹ nếu cần, game vẫn chạy bình thường không bị văng
         }
     }
 }
