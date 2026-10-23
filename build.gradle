@@ -33,8 +33,8 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:0.102.0+1.21.1"
     modImplementation "meteordevelopment:meteor-client:0.5.8"
     
-    // Khai báo Baritone API phiên bản 1.11.3 tương thích Minecraft 1.21.1
-    compileOnly "com.github.cabaletta:baritone:1.11.3"
+    // Sửa lại đúng cú pháp đa module của Baritone API trên JitPack
+    compileOnly "com.github.cabaletta.baritone:api:1.11.3"
 }
 
 processResources {
