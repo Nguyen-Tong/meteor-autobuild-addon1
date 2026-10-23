@@ -33,7 +33,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:0.102.0+1.21.1"
     modImplementation "meteordevelopment:meteor-client:0.5.8"
     
-    compileOnly "com.github.cabaletta:baritone:master-SNAPSHOT"
+    compileOnly "com.github.cabaletta.baritone:api:v1.11.3"
 }
 
 processResources {
