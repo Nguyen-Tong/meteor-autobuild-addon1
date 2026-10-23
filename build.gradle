@@ -12,8 +12,9 @@ repositories {
         name = "Fabric"
         url = "https://maven.fabricmc.net/" 
     }
-    flatDir {
-        dirs 'libs'
+    maven { 
+        name = "JitPack"
+        url = "https://jitpack.io" 
     }
 }
 
@@ -21,10 +22,10 @@ dependencies {
     minecraft "com.mojang:minecraft:1.21.1"
     mappings "net.fabricmc:yarn:1.21.1+build.3:v2"
     modImplementation "net.fabricmc:fabric-loader:0.16.0"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:0.102.0+1.21.1"
+    modImplementation "net.fabricmc:fabric-api:fabric-api:0.102.0+1.21.1"
 
-    // Load Meteor Client locally from the libs folder
-    modImplementation files('libs/meteor-client-0.5.8.jar')
+    // Sử dụng JitPack trỏ đúng vào tag phiên bản 0.5.8 của Meteor Client
+    modImplementation "com.github.MeteorDevelopment:meteor-client:0.5.8"
 }
 
 processResources {
