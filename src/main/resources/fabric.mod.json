@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "meteor-autobuild",
+  "version": "${version}",
+  "name": "Meteor Auto Build Addon",
+  "description": "Addon xây dựng tự động thông minh hỗ trợ Ice và quản lý chất lỏng.",
+  "authors": [
+    "User"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "meteor": [
+      "com.autobuild.AutoBuildAddon"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "1.21.x",
+    "java": ">=21",
+    "meteor-client": "*"
+  }
+}
