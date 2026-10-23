@@ -21,4 +21,9 @@ public class AutoBuildAddon extends MeteorAddon {
     public void onRegisterCategories() {
         Modules.registerCategory(CATEGORY);
     }
+
+    @Override
+    public String getPackage() {
+        return "com.autobuild";
+    }
 }
